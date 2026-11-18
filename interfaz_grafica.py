@@ -455,7 +455,7 @@ class AppSoftwareFJ(tk.Tk):
         barra.pack(fill="x", pady=(0, 8))
         self._boton(barra, "Ejecutar simulación de 14 operaciones", self._ejecutar_simulacion,
                     C["accent"]).pack(side="left")
-        tk.Label(barra, text="  Usa su propio gestor: no modifica los datos de las otras pestañas.",
+        tk.Label(barra, text="  Carga los datos de ejemplo en las pestañas Clientes, Servicios y Reservas.",
                  bg=C["fondo"], fg=C["gris"], font=FUENTE).pack(side="left", padx=12)
         marco = tk.Frame(tab)
         marco.pack(fill="both", expand=True)
@@ -470,11 +470,21 @@ class AppSoftwareFJ(tk.Tk):
         self.txt_sim.tag_configure("ok", foreground=C["ok"])
 
     def _ejecutar_simulacion(self):
-        """Ejecuta simulacion.ejecutar_simulacion() capturando su salida para mostrarla en la ventana."""
+        """Carga los datos de la simulación en el gestor de la ventana y muestra su salida."""
+        # Si ya hay datos ingresados a mano, pide confirmación antes de reemplazarlos.
+        hay_datos = self.gestor.clientes or self.gestor.servicios or self.gestor.reservas
+        if hay_datos:
+            if not messagebox.askyesno("Reemplazar datos",
+                                       "La simulación reemplazará los clientes, servicios y reservas actuales. ¿Continuar?"):
+                return
+            self.gestor.clientes.clear()
+            self.gestor.servicios.clear()
+            self.gestor.reservas.clear()
+
         buffer = io.StringIO()
         try:
             with contextlib.redirect_stdout(buffer):
-                simulacion.ejecutar_simulacion()
+                simulacion.ejecutar_simulacion(self.gestor)
         except Exception as err:  # Última barrera: la ventana nunca debe cerrarse por un fallo.
             buffer.write(f"\nERROR INESPERADO: {err}\n")
         self.txt_sim.config(state="normal")
@@ -490,8 +500,8 @@ class AppSoftwareFJ(tk.Tk):
                 etiqueta = ""
             self.txt_sim.insert("end", linea + "\n", etiqueta)
         self.txt_sim.config(state="disabled")
-        self._exito("Simulación finalizada. Revise la pestaña Logs.")
-        self._cargar_log()
+        self._exito("Simulación finalizada. Los datos quedaron cargados en las demás pestañas.")
+        self._refrescar_todo()
 
     # ==========================================================================
     # ACTUALIZACIÓN DE TABLAS Y LISTAS
