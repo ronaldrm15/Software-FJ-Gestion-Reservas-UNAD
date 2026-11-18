@@ -1,0 +1,15 @@
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Editores
+.vscode/
+.idea/
+
+# Nota: el archivo sistema_software_fj.log NO se ignora a propósito,
+# porque es la evidencia de auditoría que exige la actividad.
