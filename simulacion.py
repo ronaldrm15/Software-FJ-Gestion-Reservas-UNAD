@@ -12,14 +12,15 @@ from servicios import ReservaSala, AlquilerEquipo, AsesoriaEspecializada
 from reservas import GestorSoftwareFJ
 
 
-def ejecutar_simulacion() -> None:
+def ejecutar_simulacion(gestor: GestorSoftwareFJ | None = None) -> None:
     """Función principal que orquesta las 14 pruebas integrales del sistema."""
     print("=" * 80)
     print(" INICIANDO SIMULACIÓN INTEGRAL - SOFTWARE FJ (SIN BASE DE DATOS) ")
     print("=" * 80)
 
-    # Instancia el gestor central e inicializa el archivo de logs en disco.
-    gestor = GestorSoftwareFJ("sistema_software_fj.log")
+    # Usa el gestor recibido (la interfaz gráfica) o crea uno nuevo si se ejecuta por consola.
+    if gestor is None:
+        gestor = GestorSoftwareFJ("sistema_software_fj.log")
 
     # --------------------------------------------------------------------------
     # SIMULACIÓN 1: Registro VÁLIDO de clientes
