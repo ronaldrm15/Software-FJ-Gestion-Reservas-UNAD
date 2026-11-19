@@ -48,5 +48,4 @@ El log se abre en modo "agregar": borre `sistema_software_fj.log` antes de ejecu
 - Ronald Estiven Rodríguez Mora
 - David Santiago Ruiz
 - Wilian Alejandro Barreto
-- [Integrante 4]
-- [Integrante 5]
+
